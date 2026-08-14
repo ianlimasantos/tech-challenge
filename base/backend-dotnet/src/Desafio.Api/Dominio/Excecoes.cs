@@ -24,6 +24,12 @@ public sealed class ValidacaoException(string mensagem, IReadOnlyList<DetalheErr
     public override int StatusCode => StatusCodes.Status400BadRequest;
 }
 
+public sealed class EntidadeNaoProcessadaException(string mensagem, IReadOnlyList<DetalheErro>? detalhes = null)
+    : ExcecaoDeDominio("EntidadeNaoProcessada", mensagem, detalhes)
+{
+    public override int StatusCode => StatusCodes.Status422UnprocessableEntity;
+}
+
 public sealed class NaoEncontradoException(string mensagem)
     : ExcecaoDeDominio("NaoEncontrado", mensagem, null)
 {
