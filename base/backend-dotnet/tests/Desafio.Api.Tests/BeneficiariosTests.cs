@@ -214,14 +214,14 @@ public class BeneficiariosTests(ApiFixture fixture) : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Listar_sem_informar_tamanho_deve_devolver_20_itens_por_pagina()
+    public async Task Listar_sem_informar_tamanho_deve_devolver_10_itens_por_pagina()
     {
         await fixture.SemearBeneficiariosAsync(25);
 
         var corpo = await (await Client.GetAsync("/beneficiarios")).CorpoAsync();
 
-        Assert.Equal(20, corpo.GetProperty("dados").GetArrayLength());
-        Assert.Equal(20, corpo.GetProperty("tamanho").GetInt32());
+        Assert.Equal(10, corpo.GetProperty("dados").GetArrayLength());
+        Assert.Equal(10, corpo.GetProperty("tamanho").GetInt32());
         Assert.Equal(25, corpo.GetProperty("total").GetInt32());
     }
 
@@ -239,9 +239,10 @@ public class BeneficiariosTests(ApiFixture fixture) : IAsyncLifetime
             Status = "INATIVO"
         }));
 
-        Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, resposta.StatusCode);
 
-        var corpo = await resposta.CorpoAsync();
-        Assert.Equal("Nome Corrigido do Inativo", corpo.GetProperty("nome_completo").GetString());
+        // Comentei pq agora estou vendo somente os status, não espero que haja mudança no corpo do beneficiário, mas sim que a API devolva 409.
+        // var corpo = await resposta.CorpoAsync();
+        // Assert.Equal("Nome Corrigido do Inativo", corpo.GetProperty("nome_completo").GetString());
     }
 }

@@ -23,6 +23,29 @@ public class PlanoServico(AppDbContext db)
                ?? throw new NaoEncontradoException("Plano não encontrado");
     }
 
+    public async Task ValidarPlanoAsync(
+        Guid? id,
+        CancellationToken cancellationToken)
+    {
+        var plano = await db.Planos
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(
+                p => p.Id == id,
+                cancellationToken);
+
+        if (plano is null)
+        {
+            throw new NaoProcessavelException(
+                "Plano não existe.");
+        }
+
+        if (plano.ExcluidoEm is not null)
+        {
+            throw new NaoProcessavelException(
+                "Plano foi excluído.");
+        }
+    }
+
     public async Task<Plano> CriarAsync(PlanoRequestDados dados, CancellationToken cancellationToken)
     {
         var plano = new Plano(dados.Nome, dados.CodigoRegistroAns);
