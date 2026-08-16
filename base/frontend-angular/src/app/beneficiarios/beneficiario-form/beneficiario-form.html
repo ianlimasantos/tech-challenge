@@ -1,0 +1,124 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ editando ? 'Editar beneficiário' : 'Novo beneficiário' }}</h1>
+    <p>
+      {{ editando
+        ? 'Atualize os dados do beneficiário.'
+        : 'Preencha os dados para cadastrar um novo beneficiário.' }}
+    </p>
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="salvar()">
+
+    <div class="form-group">
+      <label for="nome_completo">Nome completo</label>
+      <input
+        id="nome_completo"
+        type="text"
+        formControlName="nome_completo"
+        placeholder="Digite o nome completo"
+      />
+
+      @if (
+        formulario.controls.nome_completo.touched &&
+        formulario.controls.nome_completo.invalid
+      ) {
+        <span class="error">
+          Informe o nome completo.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="cpf">CPF</label>
+      <input
+        id="cpf"
+        type="text"
+        formControlName="cpf"
+        placeholder="Digite o CPF"
+        maxlength="11"
+      />
+
+      @if (
+        formulario.controls.cpf.touched &&
+        formulario.controls.cpf.invalid
+      ) {
+        <span class="error">
+          Informe um CPF válido.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="data_nascimento">Data de nascimento</label>
+      <input
+        id="data_nascimento"
+        type="date"
+        formControlName="data_nascimento"
+      />
+
+      @if (
+        formulario.controls.data_nascimento.touched &&
+        formulario.controls.data_nascimento.invalid
+      ) {
+        <span class="error">
+          Informe a data de nascimento.
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="plano_id">Plano</label>
+
+      <select id="plano_id" formControlName="plano_id">
+        <option value="" disabled>
+          Selecione um plano
+        </option>
+
+        @for (plano of planos(); track plano.id) {
+          <option [value]="plano.id">
+            {{ plano.nome }}
+          </option>
+        }
+      </select>
+
+      @if (
+        formulario.controls.plano_id.touched &&
+        formulario.controls.plano_id.invalid
+      ) {
+        <span class="error">
+          Selecione um plano.
+        </span>
+      }
+    </div>
+
+    @if (!editando) {
+      <div class="form-group">
+        <label for="status">Status</label>
+
+        <select id="status" formControlName="status">
+          <option selected value="ATIVO">Ativo</option>
+          <option value="INATIVO">Inativo</option>
+        </select>
+      </div>
+    }
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn-secondary"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="formulario.invalid"
+      >
+        {{ editando ? 'Salvar alterações' : 'Cadastrar beneficiário' }}
+      </button>
+    </div>
+
+  </form>
+</div>

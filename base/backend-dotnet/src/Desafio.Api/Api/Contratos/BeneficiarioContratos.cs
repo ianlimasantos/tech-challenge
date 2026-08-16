@@ -24,3 +24,5 @@ public sealed record BeneficiarioResponse(
             beneficiario.PlanoId,
             beneficiario.DataCadastro);
 }
+
+

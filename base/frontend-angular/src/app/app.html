@@ -1,11 +1,16 @@
 <header class="topo">
   <h1>Cadastro de Beneficiários</h1>
+  <button routerLink="/planos">
+    Planos
+  </button>
+  <button routerLink="/beneficiario-lista">
+    Beneficiários
+  </button>
 </header>
 
 <main>
-  <app-planos-lista />
-
-  <section class="cartao pendente">
+  <router-outlet/>
+  <!-- <section class="cartao pendente">
     <h2>Beneficiários</h2>
     <p>
       Esta é a parte que falta. Construa a listagem com filtros e paginação e o formulário de
@@ -15,5 +20,6 @@
       O bloco de Planos acima já funciona e serve de referência: modelo tipado, serviço
       isolado, endereço da API injetado, tratamento de erro e de carregamento.
     </p>
-  </section>
+  </section> -->
 </main>
+

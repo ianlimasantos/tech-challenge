@@ -1,0 +1,128 @@
+<div class="pagina">
+
+  <h1>Beneficiários</h1>
+
+  <div class="filtros">
+
+    <div class="campo">
+      <label for="status">Status</label>
+
+      <select id="status" [(ngModel)]="status">
+        <option value="">Todos</option>
+        <option value="ATIVO">Ativo</option>
+        <option value="INATIVO">Inativo</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="plano">Plano</label>
+
+      <select id="plano" [(ngModel)]="planoId">
+         <option value="">
+            Todos
+          </option>
+        @for (plano of planos(); track plano.id) {
+          <option [value]="plano.id">
+            {{ plano.nome }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="acoes-filtro">
+      <button type="button" (click)="pesquisar()">
+        Pesquisar
+      </button>
+
+      <button type="button" (click)="limparFiltros()">
+        Limpar filtros
+      </button>
+      <button routerLink="/beneficiario">
+        Cadastrar Beneficiario
+      </button>
+    </div>
+
+  </div>
+
+  <!-- @if (erro()) {
+    <div class="erro">
+      {{ erro() }}
+    </div>
+  } -->
+
+  @if (carregando()) {
+
+    <p>Carregando beneficiários...</p>
+
+  } @else if (beneficiarios().length === 0) {
+
+    <p>Nenhum beneficiário encontrado.</p>
+
+  } @else {
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Nome completo</th>
+          <th>CPF</th>
+          <th>Plano</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (beneficiario of beneficiarios(); track beneficiario.id) {
+
+          <tr>
+            <td>{{ beneficiario.nome_completo }}</td>
+            <td>{{ beneficiario.cpf }}</td>
+            <td>{{ beneficiario.plano_id }}</td>
+            <td>{{ beneficiario.status }}</td>
+            <td>
+              <button class="editar" (click)="editar(beneficiario.id)">
+                Editar
+              </button>
+              <button class="excluir" (click)="excluir(beneficiario.id)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+    <div class="paginacao">
+
+      <button
+        type="button"
+        (click)="paginaAnterior()"
+        [disabled]="pagina === 1">
+        Anterior
+      </button>
+
+      <span>
+        Página {{ pagina }}
+      </span>
+
+      <button
+        type="button"
+        (click)="proximaPagina()"
+        [disabled]="pagina * tamanho >= total">
+        Próxima
+      </button>
+
+    </div>
+
+    <p>
+      Total de beneficiários: {{ total }}
+    </p>
+
+  }
+
+</div>
