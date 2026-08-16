@@ -1,8 +1,8 @@
 <div class="form-container">
   <div class="form-header">
-    <h1>{{ editando ? 'Editar beneficiário' : 'Novo beneficiário' }}</h1>
+    <h1>{{ editando() ? 'Editar beneficiário' : 'Novo beneficiário' }}</h1>
     <p>
-      {{ editando
+      {{ editando()
         ? 'Atualize os dados do beneficiário.'
         : 'Preencha os dados para cadastrar um novo beneficiário.' }}
     </p>
@@ -37,6 +37,8 @@
         formControlName="cpf"
         placeholder="Digite o CPF"
         maxlength="11"
+        [readonly]="editando()"
+        [class.cpf-bloqueado]="editando()"
       />
 
       @if (
@@ -92,7 +94,7 @@
       }
     </div>
 
-    @if (!editando) {
+    @if (editando()) {
       <div class="form-group">
         <label for="status">Status</label>
 
@@ -107,6 +109,7 @@
       <button
         type="button"
         class="btn-secondary"
+        (click)="cancelar()"
       >
         Cancelar
       </button>
@@ -116,7 +119,7 @@
         class="btn-primary"
         [disabled]="formulario.invalid"
       >
-        {{ editando ? 'Salvar alterações' : 'Cadastrar beneficiário' }}
+        {{ editando() ? 'Salvar alterações' : 'Cadastrar beneficiário' }}
       </button>
     </div>
 

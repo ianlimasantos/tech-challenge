@@ -12,7 +12,11 @@ export const routes: Routes = [
     path: 'beneficiario',
     component: BeneficiarioForm
   },
-    {
+  {
+    path: 'beneficiarios/:id/editar',
+    component: BeneficiarioForm
+  },
+  {
     path: 'beneficiario-lista',
     component: BeneficiarioLista
   },

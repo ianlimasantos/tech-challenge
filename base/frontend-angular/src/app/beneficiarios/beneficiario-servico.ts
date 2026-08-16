@@ -21,6 +21,10 @@ export class BeneficiariosServico {
     return this.http.put<Beneficiario>(`${this.base}/beneficiarios/${id}`, request);
   }
 
+  obter(id: string):Observable<Beneficiario> {
+    return this.http.get<Beneficiario>(`${this.base}/beneficiarios/${id}`);
+  }
+
   listar(pagina: number = 1, tamanho: number = 10, status?: 'ATIVO' | 'INATIVO' | '', planoId?: string): Observable<PaginaResponse<Beneficiario[]>>{
 
     let params = new HttpParams()
@@ -36,6 +40,12 @@ export class BeneficiariosServico {
     }
 
     return this.http.get<PaginaResponse<Beneficiario[]>>(`${this.base}/beneficiarios`, { params });
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.base}/beneficiarios/${id}`
+    );
   }
 }
 

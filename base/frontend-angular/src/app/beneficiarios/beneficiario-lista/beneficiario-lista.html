@@ -79,7 +79,7 @@
           <tr>
             <td>{{ beneficiario.nome_completo }}</td>
             <td>{{ beneficiario.cpf }}</td>
-            <td>{{ beneficiario.plano_id }}</td>
+            <td>{{ nomePlano(beneficiario.plano_id) }}</td>
             <td>{{ beneficiario.status }}</td>
             <td>
               <button class="editar" (click)="editar(beneficiario.id)">
@@ -126,3 +126,39 @@
   }
 
 </div>
+
+@if (modalExcluir()) {
+  <div class="modal-fundo">
+
+    <div class="modal">
+
+      <h2>Excluir beneficiário</h2>
+
+      <p>
+        Tem certeza que deseja excluir este beneficiário?
+      </p>
+
+      <div class="modal-acoes">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cancelarExclusao()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="confirmar-exclusao"
+          (click)="confirmarExclusao()"
+        >
+          Excluir
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+}

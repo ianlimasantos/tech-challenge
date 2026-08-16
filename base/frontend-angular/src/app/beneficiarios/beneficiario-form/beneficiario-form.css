@@ -117,3 +117,8 @@ form {
 .btn-secondary:hover {
   background: #e5e7eb;
 }
+
+
+input:read-only {
+  background-color:  #999696 !important;
+}

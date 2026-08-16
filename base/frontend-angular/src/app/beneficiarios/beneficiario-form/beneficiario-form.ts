@@ -7,6 +7,7 @@ import { PlanoServico } from '../../planos/plano-servico';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { mensagemDeErro } from '../../nucleo/api';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-beneficiario-form',
@@ -24,9 +25,20 @@ export class BeneficiarioForm {
   protected readonly planos = signal<Plano[]>([]);
   protected readonly erro = signal<string | null>(null);
   protected readonly carregando = signal(true);
-  editando = true;
+  private readonly route = inject(ActivatedRoute);
+  protected readonly editando = signal(false);
+  private readonly router = inject(Router);
+  id: string = '';
 
   ngOnInit(){
+
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.editando.set(true);
+      this.id = id;
+      this.carregarBeneficiario();
+    }
     this.planoServico.listar()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -78,19 +90,53 @@ export class BeneficiarioForm {
       ...valor
     }
 
-    this.beneficiarioServico
-      .cadastrar(dados)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          console.log("salvo");
-          this.carregando.set(false);
-        },
-        error: (resposta: HttpErrorResponse) => {
-          this.erro.set(mensagemDeErro(resposta))
-          this.carregando.set(false);
-        }
-      })
+
+    if(!this.id){
+      this.beneficiarioServico
+        .cadastrar(dados)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log("salvo");
+            this.carregando.set(false);
+          },
+          error: (resposta: HttpErrorResponse) => {
+            this.erro.set(mensagemDeErro(resposta))
+            this.carregando.set(false);
+          }
+        })
+    }else{
+      this.beneficiarioServico
+        .atualizar(this.id, dados)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log("salvo");
+            this.carregando.set(false);
+          },
+          error: (resposta: HttpErrorResponse) => {
+            this.erro.set(mensagemDeErro(resposta))
+            this.carregando.set(false);
+          }
+        })
+    }
   }
-  
+
+  private carregarBeneficiario(): void {
+    this.beneficiarioServico.obter(this.id).subscribe({
+      next: (beneficiario) => {
+        this.formulario.patchValue({
+          nome_completo: beneficiario.nome_completo,
+          cpf: beneficiario.cpf,
+          data_nascimento: beneficiario.data_nascimento,
+          plano_id: beneficiario.plano_id,
+          status: beneficiario.status
+        });
+      }
+    });
+  }
+
+  protected cancelar(): void {
+    this.router.navigate(['/beneficiario-lista']);
+  }
 }
