@@ -109,7 +109,7 @@
       <button
         type="button"
         class="btn-secondary"
-        (click)="cancelar()"
+        (click)="redirecionarLista()"
       >
         Cancelar
       </button>
@@ -123,5 +123,23 @@
       </button>
     </div>
 
+    @if(erro()){
+      <app-modal-mensagem
+      [mensagem]="erro()!"
+      (fechar)="erro.set(null)"
+      />
+    }
   </form>
 </div>
+
+
+@if (carregando()) {
+  <app-loading />
+}
+
+@if(cadastroEfetivado()){
+  <app-modal-mensagem
+    [mensagem]="mensagem"
+    (fechar)="redirecionarLista()"
+  />
+}

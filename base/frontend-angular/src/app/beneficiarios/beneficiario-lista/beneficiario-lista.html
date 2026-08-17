@@ -127,38 +127,22 @@
 
 </div>
 
-@if (modalExcluir()) {
-  <div class="modal-fundo">
+@if(modalExcluir()){
+  <app-modal-excluir
+    [titulo]="titulo"
+    [mensagem]=" mensagem"
+    (cancelar)="cancelarExclusao()"
+    (excluir)="confirmarExclusao()"
+  />
+}
 
-    <div class="modal">
+@if(erro()){
+  <app-modal-mensagem
+    [mensagem]="erro()!"
+    (fechar)="erro.set(null)"
+  />
+}
 
-      <h2>Excluir beneficiário</h2>
-
-      <p>
-        Tem certeza que deseja excluir este beneficiário?
-      </p>
-
-      <div class="modal-acoes">
-
-        <button
-          type="button"
-          class="cancelar"
-          (click)="cancelarExclusao()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          type="button"
-          class="confirmar-exclusao"
-          (click)="confirmarExclusao()"
-        >
-          Excluir
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
+@if (carregando()) {
+  <app-loading />
 }

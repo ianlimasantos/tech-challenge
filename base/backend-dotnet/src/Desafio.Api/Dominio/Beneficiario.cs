@@ -66,7 +66,7 @@ public partial class Beneficiario
        
         if(detalhes.Count > 0)
         {
-            if(detalhes.Count ==1 && detalhes[0].Campo == "data_nascimento" && detalhes[0].Regra == "data_nascimento_nao_pode_ser_futura")
+            if(detalhes.Count ==1 && detalhes[0].Campo == "data_nascimento" && detalhes[0].Regra == "data de nascimento não pode ser futura")
             {
                 throw new EntidadeNaoProcessadaException("Data de nascimento não pode ser futura", detalhes);
             }
@@ -110,7 +110,7 @@ public partial class Beneficiario
 
         if(detalhes.Count > 0)
         {
-            if(detalhes.Count ==1 && detalhes[0].Campo == "data_nascimento" && detalhes[0].Regra == "data_nascimento_nao_pode_ser_futura")
+            if(detalhes.Count ==1 && detalhes[0].Campo == "data_nascimento" && detalhes[0].Regra == "data de nascimento não pode ser futura")
             {
                 throw new EntidadeNaoProcessadaException("Data de nascimento não pode ser futura", detalhes);
             }
@@ -148,7 +148,7 @@ public partial class Beneficiario
             detalhes.Add(new DetalheErro("data_nascimento", "obrigatorio"));
         }else if (dataNascimento.Value > DateOnly.FromDateTime(DateTime.UtcNow))
         {
-            detalhes.Add(new DetalheErro("data_nascimento", "data_nascimento_nao_pode_ser_futura"));
+            detalhes.Add(new DetalheErro("data_nascimento", "data de nascimento não pode ser futura"));
         }
 
         if(planoId is null)

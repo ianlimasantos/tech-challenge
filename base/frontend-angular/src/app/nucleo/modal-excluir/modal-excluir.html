@@ -1,0 +1,33 @@
+<div class="modal-fundo">
+
+    <div class="modal">
+
+      <h2>{{titulo()}}</h2>
+
+      <p>
+        {{mensagem()}}
+      </p>
+
+      <div class="modal-acoes">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cancelar.emit()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="confirmar-exclusao"
+          (click)="excluir.emit()"
+        >
+          Excluir
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>

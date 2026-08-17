@@ -1,0 +1,46 @@
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.cancelar {
+  background: gray;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+}
+
+.confirmar-exclusao {
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+}
+
+
+
+.modal-fundo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
