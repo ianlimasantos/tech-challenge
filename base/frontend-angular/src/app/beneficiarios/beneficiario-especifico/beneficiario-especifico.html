@@ -1,0 +1,102 @@
+
+  <div class="busca-id">
+
+    <div class="campo">
+      <label for="beneficiario-id">Buscar beneficiário por ID</label>
+
+      <input
+        id="beneficiario-id"
+        type="text"
+        [(ngModel)]="beneficiarioIdBusca"
+        placeholder="Digite o ID"
+      />
+    </div>
+
+    <button
+      type="button"
+      (click)="buscarPorId()"
+      [disabled]="!beneficiarioIdBusca">
+      Pesquisar
+    </button>
+
+  </div>
+
+  @if (beneficiarioBusca()) {
+
+    <div class="resultado-busca">
+
+      <h2>Beneficiário encontrado</h2>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Nome completo</th>
+            <th>CPF</th>
+            <th>Plano</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+
+            <td>
+              {{ beneficiarioBusca()!.nome_completo }}
+            </td>
+
+            <td>
+              {{ beneficiarioBusca()!.cpf }}
+            </td>
+
+            <td>
+              {{ nomePlano(beneficiarioBusca()!.plano_id) }}
+            </td>
+
+            <td>
+              {{ beneficiarioBusca()!.status }}
+            </td>
+
+            <td>
+
+              <button
+                class="editar"
+                (click)="editar(beneficiarioBusca()!.id)">
+                Editar
+              </button>
+
+              <button
+                class="excluir"
+                (click)="excluir(beneficiarioBusca()!.id)">
+                Excluir
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+
+  @if(modalExcluir()){
+  <app-modal-excluir
+    [titulo]="titulo"
+    [mensagem]=" mensagem"
+    (cancelar)="cancelarExclusao()"
+    (excluir)="confirmarExclusao()"
+  />
+}
+
+@if(erro()){
+  <app-modal-mensagem
+    [mensagem]="erro()!"
+    (fechar)="erro.set(null)"
+  />
+}

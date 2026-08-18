@@ -1,44 +1,39 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Beneficiario } from '../beneficiario';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
-import { mensagemDeErro } from '../../nucleo/api';
 import { Loading } from '../../nucleo/loading/loading';
 import { ModalExcluir } from '../../nucleo/modal-excluir/modal-excluir';
-import { Plano } from '../../planos/plano';
-import { PlanoServico } from '../../planos/plano-servico';
-import { Beneficiario } from '../beneficiario';
-import { BeneficiariosServico } from '../beneficiario-servico';
 import { ModalMensagem } from '../../nucleo/modal-mensagem/modal-mensagem';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { PlanoServico } from '../../planos/plano-servico';
+import { Plano } from '../../planos/plano';
+import { BeneficiariosServico } from '../beneficiario-servico';
+import { HttpErrorResponse } from '@angular/common/http';
+import { mensagemDeErro } from '../../nucleo/api';
 
 @Component({
-  selector: 'app-beneficiario-lista',
+  selector: 'app-beneficiario-especifico',
   imports: [FormsModule, RouterLink, ModalMensagem, ModalExcluir, Loading],
-  templateUrl: './beneficiario-lista.html',
-  styleUrl: './beneficiario-lista.css',
+  templateUrl: './beneficiario-especifico.html',
+  styleUrl: './beneficiario-especifico.css',
 })
-export class BeneficiarioLista {
+export class BeneficiarioEspecifico {
 
-  protected readonly beneficiarios = signal<Beneficiario[]>([]);
-  protected beneficiarioServico = inject(BeneficiariosServico);
-  private readonly planoServico = inject(PlanoServico);
-  private readonly destroyRef = inject(DestroyRef);
-  protected readonly planos = signal<Plano[]>([]);
-  protected carregando = signal(false);
-  private readonly router = inject(Router);
-  protected pagina = 1;
-  protected tamanho = 10;
-  protected total = 0;
-  status?: 'ATIVO' | 'INATIVO' | '' = '';
-  planoId?: string = '';
   protected readonly modalExcluir = signal(false);
   protected beneficiarioIdExcluir: string | null = null;
   protected erro = signal<string | null>(null);
   readonly titulo = "Excluir beneficiário";
   readonly mensagem = "Tem certeza que deseja excluir este beneficiário?";
-
+  protected beneficiarioIdBusca = '';
+  protected beneficiarioBusca = signal<Beneficiario | null>(null);
+  protected carregando = signal(false);
+  private readonly planoServico = inject(PlanoServico);
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly planos = signal<Plano[]>([]);
+  private readonly router = inject(Router);
+  protected beneficiarioServico = inject(BeneficiariosServico);
 
   ngOnInit() {
     this.carregando.set(true);
@@ -57,38 +52,31 @@ export class BeneficiarioLista {
       })
   }
 
+  protected buscarPorId() {
 
-  protected pesquisar() {
+    if (!this.beneficiarioIdBusca.trim()) {
+      return;
+    }
+
+    this.erro.set(null);
+    this.beneficiarioBusca.set(null);
     this.carregando.set(true);
-    this.beneficiarioServico.listar(this.pagina, this.tamanho, this.status, this.planoId)
+
+    this.beneficiarioServico
+      .obter(this.beneficiarioIdBusca.trim())
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => { this.carregando.set(false) })
+        finalize(() => this.carregando.set(false))
       )
       .subscribe({
         next: (resposta) => {
-          this.beneficiarios.set(resposta.dados);
-          this.total = resposta.total;
+          this.beneficiarioBusca.set(resposta);
         },
+
         error: (resposta: HttpErrorResponse) => {
-          this.erro.set(mensagemDeErro(resposta))
+          this.erro.set(mensagemDeErro(resposta));
         }
-      })
-  }
-
-  protected limparFiltros() {
-    this.status = '';
-    this.planoId = '';
-  }
-
-  protected paginaAnterior() {
-    this.pagina--;
-    this.pesquisar();
-  }
-
-  protected proximaPagina() {
-    this.pagina++;
-    this.pesquisar();
+      });
   }
 
   protected editar(id: string) {
@@ -119,7 +107,7 @@ export class BeneficiarioLista {
       .subscribe({
         next: () => {
           this.modalExcluir.set(false);
-          this.pesquisar()
+          this.buscarPorId()
           this.beneficiarioIdExcluir = null;
         },
         error: (resposta: HttpErrorResponse) => {
@@ -128,16 +116,12 @@ export class BeneficiarioLista {
       });
   }
 
+
   protected nomePlano(planoId: string): string {
     const plano = this.planos().find(
       plano => plano.id === planoId
     );
 
     return plano?.nome ?? 'Plano não encontrado';
-  }
-
-  protected alterarTamanhoPagina(): void {
-    this.pagina = 1;
-    this.pesquisar();
   }
 }

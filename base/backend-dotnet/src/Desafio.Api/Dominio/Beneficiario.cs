@@ -29,7 +29,7 @@ public partial class Beneficiario
 
     public string NomeCompleto { get; set; } = null!;
 
-    public string Cpf { get; set; } = null!;
+    public string Cpf { get; private set; } = null!;
 
     public DateOnly DataNascimento { get; set; }
 

@@ -122,3 +122,59 @@ th {
   align-items: center;
   gap: 15px;
 }
+
+
+.busca-id {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 20px;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.busca-id .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.busca-id label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.busca-id input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.busca-id input:focus {
+  outline: none;
+  border-color: #555;
+}
+
+.busca-id button {
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.busca-id button:hover:not(:disabled) {
+  background: #555;
+}
+
+.busca-id button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
